@@ -1,70 +1,65 @@
 <!DOCTYPE html>
+
 <html ng-app="myShoppingList">
-<head>
-	<title>Angular 1.2</title>
-    <!--angularjs-->
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-	  <!-- Latest compiled and minified CSS -->
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  	<!-- jQuery library -->
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  	<!-- Latest compiled JavaScript -->
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!--Google Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Anton|PT Sans|Hind Siliguri">
-    <!--Loaded files-->
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="/javascripts/indexctrl.js"></script>
+    <head>
+    	<title>Angular 1.2</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|PT Sans|Hind Siliguri">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+    	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>	
+      	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+      	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    </head>
 
-</head>
-
-<body ng-controller="myCtrl">
-<div lass="container">
-  <div class="col-md-3"></div>
-
-  <div class="col-md-6">
-
-	<div class="panel panel-default">
-
-   	 	<div class="panel-heading"><h3>Shopping List</h3></div>
-
-    	<div class="panel-body">
-    		<ul  class="list-group">
-   			 <li  class="list-group-item" ng-repeat="x in lists"> 
-              {{x.productName}} 
-            <a class="badge" id="remove" ng-click="removeItem(x.productName)">
-              <span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></span>
-            </a>
-              <div class="badge" id="edit" data-toggle="tooltip" title="Edit"  ng-if="x.edit"  ng-click="updateItem(x.productName,$index)">
-                <span class="glyphicon glyphicon-pencil"></span>
-              </div>
-              <div class="badge" id="cancel" ng-if="x.cancel" ng-click="cancelItem($index)">
-                <span>cancel</span>
-              </div>
-        </li>
-  			</ul>
-    	</div>
-
-    	 <div class="panel-footer">
-        <form>
-    	 	<input ng-model="addMe" class="form-control inputSize" ng-pattern="/^[a-zA-Z\s]*$/" placeholder="Add your items">
-  			<button type="button" class="btn btn-success" ng-click="addItem()" ng-if="myAdd" ng-disabled="!addMe">Add</button>
-        <button type="button" class="btn btn-info" ng-click="updItem()" ng-if="myUpd" ng-disabled="!addMe">Update</button>
-        <div class="alert alert-success alert-dismissible" ng-if="success">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="succClose()">&times;</a>
-          <strong>Yay!</strong> Item added successfully.
+    <body ng-controller="myCtrl">
+        <div class="container">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 main">
+              	<div class="panel panel-default">
+                 	<div class="panel-heading"><h3>Shopping List</h3></div>
+                    <div class="panel-body">
+                        <!-- Shows list of items --> 
+                        <ul  class="list-group">
+                     		<li  class="list-group-item" ng-repeat="list in lists"> 
+                                {{list.productName}} 
+                                <a class="badge" id="remove" ng-click="removeItem(list.productName)">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></span>
+                                </a>
+                                <div class="badge" id="edit" data-toggle="tooltip" title="Edit"  ng-if="list.edit"  ng-click="updateItem(list.productName,$index)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </div>
+                                <div class="badge" id="cancel" ng-if="list.isCancel" ng-click="cancelItem($index)">
+                                    <span>cancel</span>
+                                </div>
+                            </li>
+                    	</ul>
+                    </div>
+                    <div class="panel-footer">
+                        <form>
+                            <input ng-model="addMe" class="form-control inputSize" ng-pattern="/^[a-zA-Z\s]*$/" placeholder="Add your items">
+                			<button type="button" class="btn btn-primary" ng-click="addItem()" ng-if="isMyAdd" ng-disabled="!addMe">Add</button>
+                            <button type="button" class="btn btn-info" ng-click="updItem()" ng-if="isMyUpdate" ng-disabled="!addMe">Update</button>
+                            <!-- Shows alerts -->
+                            <div class="alertMargin">
+                                <div class="alert alert-success alert-dismissible" ng-if="isSuccess">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="succClose()">&times;</a>
+                                    <strong>Yay!</strong> {{successText}}
+                                </div>
+                                <div class="alert alert-warning alert-dismissible" ng-if="isWarning">
+                                    <strong>Oops!</strong> {{errorText}}
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="warnClose()">&times;</a>  
+                                </div>
+                                <div class="alert alert-info" ng-if="isDelete">
+                                    <strong>Poof!</strong> {{deleteText}}
+                                    <a href="#" class="close closeD" data-dismiss="alert" aria-label="close" ng-click="delClose()">  &times;</a> 
+                                </div>
+                            </div>
+                        </form>
+              	    </div>
+            	</div>
+            </div>
+            <div class="col-md-3"></div>
         </div>
-        <div class="alert alert-warning alert-dismissible" ng-if="warning">
-          <strong>Oops!</strong> {{errorText}}
-          <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="warnClose()">&times;</a>  
-        </div>
-        </form>
-    	 </div>
-  	</div>
-  </div>
-
-  <div class="col-md-3"></div>
-</div>
-
-</body>
+        <script src="/javascripts/indexctrl.js"></script>
+    </body>
 </html>
